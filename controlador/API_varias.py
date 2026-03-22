@@ -1,42 +1,16 @@
 from flask import Blueprint, jsonify, request
 import pyodbc
-from db import get_connection, get_connection_dynamic
+from conexion_BD.db import  get_connection_dynamic
 
 import uuid
 
 # 🔥 almacenamiento en memoria
 SESIONES = {}
 
-usuarios_bp = Blueprint('usuarios', __name__)
-
-@usuarios_bp.route('/usuarios')
-def usuarios():
-    try:
-        filtro = "enero"
-
-        with get_connection() as conn: 
-            cursor = conn.cursor()
-
-            cursor.execute(
-                "SELECT TOP 10 * FROM MOVILES WHERE mov_foto LIKE ?",
-                (f"%{filtro}%",)
-            )
-
-            rows = cursor.fetchall()
-
-            resultado = []
-            for row in rows:
-                resultado.append([str(col) for col in row])
-
-        return jsonify(resultado)
-
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+varias_bp = Blueprint('varias', __name__)
 
 
-
-
-@usuarios_bp.route('/listar-bd', methods=['POST'])
+@varias_bp.route('/listar-bd', methods=['POST'])
 def listar_bd():
     try:
         data = request.json
@@ -63,7 +37,7 @@ def listar_bd():
         return jsonify({"error": str(e)}), 500
 
 
-@usuarios_bp.route('/estado-dispositivo', methods=['POST'])
+@varias_bp.route('/estado-dispositivo', methods=['POST'])
 def estado_dis():
     try:
         data = request.json
@@ -111,7 +85,7 @@ def estado_dis():
 
 
 
-@usuarios_bp.route('/tabla', methods=['POST'])
+@varias_bp.route('/tabla', methods=['POST'])
 def obtener_tabla():
     try:
         data = request.json
@@ -296,7 +270,7 @@ def obtener_tabla():
 
 # EndPoint para acceder a la base de datos.
 
-@usuarios_bp.route('/login', methods=['POST'])
+@varias_bp.route('/login', methods=['POST'])
 def login():
     try:
         data = request.json

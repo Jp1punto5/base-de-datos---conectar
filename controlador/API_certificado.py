@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
-from usuario import SESIONES  # <-- reutilizamos la memoria
-from db import get_connection_dynamic
+from controlador.API_varias import SESIONES  # <-- reutilizamos la memoria
+from conexion_BD.db import get_connection_dynamic
 
 cert_bp = Blueprint("certificados", __name__)
 

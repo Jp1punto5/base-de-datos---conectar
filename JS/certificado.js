@@ -1,17 +1,3 @@
-// ================= VALIDAR TITULO Y MOSTRAR BOTON =================
-// document.addEventListener("DOMContentLoaded", function () {
-
-//     const tituloElement = document.getElementById("titulo");
-//     const boton = document.getElementById("btnCertificado");
-
-//     if (!tituloElement || !boton) return;
-
-//     const titulo = tituloElement.textContent || "";
-
-//     boton.style.display = titulo.includes("MOVILES_EQUIPAMIENTO")
-//         ? "inline-block"
-//         : "none";
-// });
 
 
 async function resizeImage(base64, maxWidth, maxHeight, outputType = 'jpeg', quality = 0.7) {
@@ -42,8 +28,6 @@ async function resizeImage(base64, maxWidth, maxHeight, outputType = 'jpeg', qua
     });
 }
 
-
-// ================= GENERAR CERTIFICADO =================
 
 // ================= GENERAR CERTIFICADO EN ZIP =================
 

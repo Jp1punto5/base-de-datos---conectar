@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
-from usuario import usuarios_bp
-from API_certificado import cert_bp
+from controlador.API_varias import varias_bp
+from controlador.API_certificado import cert_bp
 
 import pyodbc
 
@@ -11,7 +11,7 @@ app = Flask(__name__)
 CORS(app)
 
 # Registrar rutas
-app.register_blueprint(usuarios_bp)
+app.register_blueprint(varias_bp)
 app.register_blueprint(cert_bp)
 
 @app.route('/')
