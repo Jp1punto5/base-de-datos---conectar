@@ -1,0 +1,155 @@
+/* POPUP BASE */
+.popup-gps {
+    min-width: 220px;
+    max-width: 260px;
+    background: #1e293b;
+    color: #e2e8f0;
+    padding: 12px 14px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    font-size: clamp(12px, 1vw, 15px);
+}
+
+/* TITULO */
+.popup-gps h3 {
+    margin: 0 0 8px 0;
+    font-size: clamp(14px, 1.2vw, 18px);
+    color: #38bdf8;
+}
+
+/* TEXTO */
+.popup-gps p {
+    margin: 4px 0;
+    line-height: 1.4;
+}
+
+.popup-gps b {
+    color: #94a3b8;
+}
+
+/* ESTADOS */
+.estado-online {
+    color: #22c55e;
+    font-weight: bold;
+}
+
+.estado-offline {
+    color: #ef4444;
+    font-weight: bold;
+}
+
+/* VELOCIDAD */
+.velocidad {
+    color: #facc15;
+}
+
+/* EVENTO */
+.evento {
+    font-size: clamp(11px, 0.9vw, 13px);
+    color: #cbd5f5;
+}
+
+/* BARRA SUPERIOR */
+.popup-gps::before {
+    content: "";
+    display: block;
+    height: 4px;
+    border-radius: 10px 10px 0 0;
+    background: linear-gradient(90deg, #38bdf8, #0ea5e9);
+    margin: -12px -14px 10px -14px;
+}
+
+/* GOOGLE FIX */
+.gm-style-iw {
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    max-width: none !important;
+}
+
+.gm-style-iw-d {
+    padding: 0 !important;
+    overflow: visible !important;
+    max-width: none !important;
+}
+
+.gm-ui-hover-effect {
+    filter: invert(1);
+    opacity: 0.7;
+}
+
+.gm-ui-hover-effect:hover {
+    opacity: 1;
+}
+
+/* POPUP PRO */
+.popup-gps.pro {
+    background: #0f172a;
+    border-radius: 12px;
+    overflow: hidden;
+    min-width: 260px;
+    max-width: 320px;  /* 🔥 más espacio */
+}
+
+/* HEADER */
+.popup-header {
+    background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+    padding: 10px;
+    font-weight: bold;
+    color: #020617;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* BODY */
+.popup-body {
+    padding: 10px;
+}
+
+.popup-body .item {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.popup-body i {
+    color: #38bdf8;
+}
+
+.popup-body small {
+    color: #94a3b8;
+    font-size: 11px;
+}
+
+.popup-body span {
+    color: #e2e8f0;
+}
+
+
+
+/* QUITA PADDING INTERNO EXTRA */
+.gm-style-iw-c {
+     max-width: none !important;
+    padding: 0 !important;
+    border-radius: 12px !important;
+}
+
+/* POPUP DINÁMICO  para alertas en el INPUT*/
+.input-popup {
+    position: absolute;
+    background: #ef4444;
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    z-index: 10000;
+    white-space: nowrap;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+.input-popup.show {
+    opacity: 1;
+}

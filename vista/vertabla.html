@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ver Tabla</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <!-- <link rel="stylesheet" href="../css/modal.css"> -->
+
+    <!-- iconos -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+    <!-- tu JS -->
+    <script src="../controlador/JS/vert.js" defer></script>
+    <script src="../controlador/JS/modal.js"></script>
+    <script src="../controlador/JS/certificado.js"></script>
+</head>
+<body class="vertabla">
+
+<div class="container">
+
+    <div class="card">
+        <h2 id="titulo"></h2>
+
+        <div class="filtros-container">
+
+            <div class="input-icon">
+                <i class="fas fa-list-ol"></i>
+                <input type="number" id="limite" value="10">
+            </div>
+
+            <div class="input-icon">
+                <i class="fas fa-car"></i>
+                <input type="text" id="filtro2" maxlength="7" placeholder="Patente">
+            </div>
+            
+            <div class="input-icon">
+                <i class="fas fa-microchip"></i>
+                <input type="text" id="filtro1" placeholder="Cargando...">
+            </div>
+
+            <button onclick="cargarDatos()">
+                <i class="fas fa-rotate"></i> Actualizar
+            </button>
+
+            <!--aqui va el boton para el certificado-->
+            <button id="btnCertificado">
+               Descargar Certificado
+            </button>
+            <textarea id="inputPatentes" placeholder="Pega las patentes aquí, una por línea"></textarea>
+
+            <!--aqui termina el boton para el certificado-->
+
+            <div class="input-icon buscador">
+                <i class="fas fa-search"></i>
+                <input type="text" id="busquedaTabla" placeholder="Buscar en la tabla..." onkeyup="filtrarTabla()">
+            </div>
+
+        </div>
+
+        <p id="estado"></p>
+    </div>
+
+    <div class="card">
+        <div class="layout-mapa">
+
+            <div class="mapa-container">
+                <div id="mapa"></div>
+            </div>
+
+            <div class="tabla-container-wrapper">
+                <div class="scroll-top" id="scrollTop">
+                    <div id="scrollTopInner"></div>
+                </div>
+
+                <div class="table-container" id="scrollBottom">
+                    <table id="tabla"></table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- ================= MODAL ================= -->
+
+<div id="modalEditar" class="modal">
+    <div class="modal-content">
+
+        <span class="close" onclick="cerrarModal()">✖</span>
+        <h3 id="modalHeader">Editar móvil</h3>
+
+        <div class="modal-body">
+
+            <!-- 🔥 SOLO INPUTS CON SCROLL -->
+            <div class="modal-form-scroll">
+
+                <div class="form-group">
+                    <label>Código</label>
+                    <span id="edit_codigo"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Patente</label>
+                    <div class="edit-row">
+                        <input id="edit_patente" maxlength="8" disabled>
+                        <button onclick="habilitarCampo('edit_patente')">✏️</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Dispositivo</label>
+                    <div class="edit-row">
+                        <input id="edit_dispositivo" maxlength="20" disabled>
+                        <button onclick="habilitarCampo('edit_dispositivo')">✏️</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Chasis</label>
+                    <div class="edit-row">
+                        <input id="edit_nombre" maxlength="25" disabled>
+                        <button onclick="habilitarCampo('edit_nombre')">✏️</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Device ID - Satelital</label>
+                    <div class="edit-row">
+                        <input id="edit_iddmr" maxlength="50" disabled>
+                        <button onclick="habilitarCampo('edit_iddmr')">✏️</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Fecha ins + Soluciones</label>
+                    <div class="edit-row">
+                        <input id="edit_foto" maxlength="250" disabled>
+                        <button onclick="habilitarCampo('edit_foto')">✏️</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Velocidad</label>
+                    <div class="edit-row">
+                        <input id="edit_velocidad" maxlength="4" disabled>
+                        <button onclick="habilitarCampo('edit_velocidad')">✏️</button>
+                    </div>
+                </div>
+
+                <!-- 🔥 GRUPOS -->
+                <div class="form-group">
+                    <label>Grupo 1</label>
+                    <div class="edit-row">
+                        <input id="edit_grupo1" maxlength="50" disabled>
+                        <button onclick="habilitarCampo('edit_grupo1')">✏️</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Grupo 2</label>
+                    <div class="edit-row">
+                        <input id="edit_grupo2" maxlength="50" disabled>
+                        <button onclick="habilitarCampo('edit_grupo2')">✏️</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Grupo 3</label>
+                    <div class="edit-row">
+                        <input id="edit_grupo3" maxlength="50" disabled>
+                        <button onclick="habilitarCampo('edit_grupo3')">✏️</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Grupo 4</label>
+                    <div class="edit-row">
+                        <input id="edit_grupo4" maxlength="50" disabled>
+                        <button onclick="habilitarCampo('edit_grupo4')">✏️</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- 🔥 FUERA DEL SCROLL -->
+            <button onclick="actualizarPosicion()">📡 Actualizar posición</button>
+
+            <div id="map"></div>
+
+        </div>
+
+        <div class="modal-footer">
+            <button onclick="cerrarModal()">Cancelar</button>
+            <button onclick="guardarCambios()">Guardar</button>
+        </div>
+
+    </div>
+</div>
+
+
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDiqClsmIEIrUNB8x-3QdqPoWyDDRxFrjc"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script><!-- esto es para generar PDFs-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script> <!-- esto es para generar comprimidos ZIP-->
+</body>
+</html>

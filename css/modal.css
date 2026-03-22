@@ -1,0 +1,158 @@
+/* ================= MODAL BASE ================= */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.7);
+    z-index: 9999;
+}
+
+/* ================= CONTENEDOR ================= */
+.modal-content {
+    background: #1e293b;
+
+    width: 90%;
+    max-width: 650px;
+
+    height: calc(95vh - 40px);   /* 🔥 exacto */
+    margin: 20px auto;            /* 🔥 fijo, no relativo */
+
+    padding: 15px;
+    border-radius: 10px;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;          /* 🔥 evita que crezca */
+
+    position: relative;
+    z-index: 10000;
+
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+}
+
+/* BOTON CERRAR */
+.close {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+/* ================= BODY ================= */
+.modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    flex: 1;                  /* 🔥 ocupa espacio dinámico */
+    overflow: hidden;
+}
+
+/* ================= FORM SCROLL ================= */
+.modal-form-scroll {
+    max-height: 180px;        /* 🔽 más compacto */
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+/* ================= FOOTER ================= */
+.modal-footer {
+    margin-top: 10px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* ================= FORM ================= */
+.form-group {
+    margin-bottom: 12px;
+}
+
+.edit-row {
+    display: flex;
+    gap: 5px;
+}
+
+.edit-row input {
+    flex: 1;
+}
+
+/* ================= MAPA ================= */
+#map {
+    flex: 1;                  /* 🔥 SE ADAPTA AUTOMÁTICAMENTE */
+    min-height: 220px;
+    height: auto;
+    border-radius: 8px;
+    margin-top: 5px;
+}
+
+/* ================= INPUTS ================= */
+input {
+    background: #0f172a;
+    color: #fff;
+    border: 1px solid #334155;
+    padding: 6px;
+    border-radius: 6px;
+}
+
+/* ================= SCROLL ================= */
+.modal-form-scroll::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modal-form-scroll::-webkit-scrollbar-thumb {
+    background: #3b82f6;
+    border-radius: 4px;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-height: 680px) {
+    .modal-content {
+        height: 94vh;
+    }
+
+    .modal-form-scroll {
+        max-height: 140px;
+    }
+
+    #map {
+        min-height: 180px;
+    }
+}
+
+/* ================= FIX GOOGLE MAPS ================= */
+
+/* QUITA LIMITES DEL INFOWINDOW */
+.gm-style-iw {
+    max-width: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+}
+
+/* CONTENEDOR INTERNO */
+.gm-style-iw-d {
+    overflow: visible !important;
+    max-width: none !important;
+    padding: 0 !important;
+}
+
+/* CONTENEDOR EXTERNO */
+.gm-style-iw-c {
+    max-width: none !important;
+    padding: 0 !important;
+    border-radius: 12px !important;
+}
+
+/* BOTON CERRAR (X) */
+.gm-ui-hover-effect {
+    filter: invert(1);
+    opacity: 0.7;
+}
+
+.gm-ui-hover-effect:hover {
+    opacity: 1;
+}

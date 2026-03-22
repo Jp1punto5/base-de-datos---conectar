@@ -1,0 +1,33 @@
+@media (max-width: 768px) {
+    .container {
+        max-width: 100%;
+    }
+
+    input, select {
+        width: 100%;
+    }
+
+    table {
+        min-width: 700px;
+        font-size: 12px;
+    }
+
+    th, td {
+        padding: 6px;
+    }
+}
+
+@media (max-width: 900px) {
+    .layout-mapa {
+        flex-direction: column;
+    }
+
+    .mapa-container,
+    .tabla-container-wrapper {
+        width: 100%;
+    }
+
+    #mapa {
+        height: 300px;
+    }
+}

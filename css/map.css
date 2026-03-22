@@ -1,0 +1,53 @@
+.layout-mapa {
+    display: flex;
+    gap: 15px;
+
+    /* 🔥 CLAVE: límite vertical */
+    height: 80vh;
+
+    /* 🔥 evita crecimiento infinito */
+    overflow: hidden;
+}
+
+/* MAPA */
+.mapa-container {
+    width: 40%;
+    height: 100%; /* 🔥 importante */
+
+    min-height: 0; /* 🔥 evita overflow raro */
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+}
+
+#mapa {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+}
+
+/* TABLA */
+.tabla-container-wrapper {
+    width: 60%;
+    height: 100%; /* 🔥 importante */
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden; /* 🔥 necesario para que funcione el scroll interno */
+}
+
+/* OCULTAR MAPA */
+.mapa-container.oculto {
+    display: none;
+}
+
+.layout-mapa.sin-mapa .tabla-container-wrapper {
+    width: 100%;
+}
+
+.layout-mapa.sin-mapa .mapa-container {
+    display: none;
+}

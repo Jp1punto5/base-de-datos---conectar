@@ -1,0 +1,85 @@
+.certificado {
+    width: 210mm;
+    height: 297mm;
+    background: #f4f6f8;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.certificado-container {
+    width: 85%;
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    border: 2px solid #2f5d8a;
+}
+
+/* HEADER */
+.certificado-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.certificado-header h1 {
+    font-size: 28px;
+    margin: 0;
+}
+
+.certificado-header h2 {
+    font-size: 14px;
+    color: #7fbf3f;
+    margin: 0;
+}
+
+/* TEXTO */
+.certificado p {
+    font-size: 13px;
+    margin: 20px 0;
+    line-height: 1.5;
+}
+
+/* BLOQUES */
+.fila {
+    display: flex;
+    justify-content: space-between;
+    background: #eef1f4;
+    padding: 12px 18px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    font-size: 13px;
+}
+
+.label {
+    font-weight: bold;
+    color: #555;
+}
+
+.value {
+    color: #2f5d8a;
+}
+
+/* FIRMA */
+.firma {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.firma img {
+    width: 120px;
+}
+
+/* FOOTER */
+.footer {
+    margin-top: 30px;
+    font-size: 12px;
+    text-align: center;
+}
+
+.footer .fecha {
+    margin-top: 10px;
+    color: #2f5d8a;
+    font-weight: bold;
+}

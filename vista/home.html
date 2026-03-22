@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Conexión SQL</title>
+    <link rel="stylesheet" href="../css/main.css">
+</head>
+<body class="home">
+
+<div class="container">
+
+    <div class="card">
+        <h2>Conectar a SQL Server</h2>
+
+        <input type="text" id="server" placeholder="IP servidor">
+        <input type="text" id="user" placeholder="Usuario">
+        <input type="password" id="password" placeholder="Contraseña">
+
+        <button onclick="conectar()">Conectar</button>
+
+        <p id="estado"></p>
+    </div>
+
+    <div class="card">
+        <select id="databases" disabled>
+            <option>Seleccione base de datos</option>
+        </select>
+
+        <button id="btnConectarBD" onclick="conectarBD()" disabled>
+            Conectar a BD
+        </button>
+    </div>
+
+    <div id="tablas" class="card" style="display:none;">
+        <h3>Tablas disponibles</h3>
+
+        <button onclick="abrirTabla('MOVILES')">MOVILES</button>
+        <button onclick="abrirTabla('MOVILES_EQUIPAMIENTO')">MOVILES_EQUIPAMIENTO</button>
+        <br>
+        <button onclick="abrirTabla('reportabilidad')">Validar Reportabilidad</button>
+    </div>
+
+</div>
+
+<script>
+
+// 🔥 Paso 1: LOGIN
+function conectar() {
+    const server = document.getElementById('server').value;
+    const user = document.getElementById('user').value;
+    const password = document.getElementById('password').value;
+
+    document.getElementById('estado').innerText = "⏳ Conectando...";
+
+    fetch('http://127.0.0.1:5000/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ server, user, password })
+    })
+    .then(res => res.json())
+    .then(data => {
+
+        if (data.error) {
+            document.getElementById('estado').innerText = "❌ Error: " + data.error;
+            return;
+        }
+
+        localStorage.setItem('session_id', data.session_id);
+
+        document.getElementById('estado').innerText = "✅ Conectado";
+
+        cargarBases();
+    })
+    .catch(err => {
+        document.getElementById('estado').innerText = "❌ Error conexión";
+        console.error(err);
+    });
+}
+
+
+// 🔥 Paso 2: listar BD
+function cargarBases() {
+    const session_id = localStorage.getItem('session_id');
+
+    fetch('http://127.0.0.1:5000/listar-bd', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ session_id })
+    })
+    .then(res => res.json())
+    .then(data => {
+
+        const select = document.getElementById('databases');
+        select.innerHTML = '';
+
+        data.forEach(db => {
+            const option = document.createElement('option');
+            option.value = db;
+            option.text = db;
+            select.appendChild(option);
+        });
+
+        select.disabled = false;
+        document.getElementById('btnConectarBD').disabled = false;
+    });
+}
+
+
+// 🔥 Paso 3: seleccionar BD
+function conectarBD() {
+    const database = document.getElementById('databases').value;
+
+    localStorage.setItem('database', database);
+
+    document.getElementById('tablas').style.display = 'block';
+}
+
+
+// 🔥 Paso 4: abrir tabla
+function abrirTabla(tabla) {
+    const session_id = localStorage.getItem('session_id');
+    const database = localStorage.getItem('database');
+
+    const url = `vertabla.html?tabla=${tabla}&database=${database}&session_id=${session_id}`;
+
+    window.location.assign(url);
+}
+
+</script>
+
+</body>
+</html>

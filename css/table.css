@@ -1,0 +1,109 @@
+/* SCROLL SUPERIOR */
+.scroll-top {
+    overflow-x: auto;
+    overflow-y: hidden;
+    height: 12px;
+    margin-bottom: 5px;
+
+    flex: 0 0 auto; /* 🔥 importante */
+}
+
+.scroll-top div {
+    height: 1px;
+}
+
+/* CONTENEDOR TABLA */
+.table-container {
+    width: 100%;
+
+    flex: 1; /* 🔥 ocupa el espacio disponible */
+
+    overflow-x: auto;
+    overflow-y: auto; /* 🔥 SCROLL VERTICAL */
+
+    max-height: 100%;
+}
+
+/* SCROLL ESTILO */
+.scroll-top::-webkit-scrollbar,
+.table-container::-webkit-scrollbar {
+    height: 10px;
+    width: 10px; /* 🔥 scrollbar vertical */
+}
+
+.scroll-top::-webkit-scrollbar-thumb,
+.table-container::-webkit-scrollbar-thumb {
+    background: linear-gradient(90deg, #38bdf8, #0ea5e9);
+    border-radius: 10px;
+}
+
+/* TABLA */
+table {
+    width: 100%;
+    min-width: 1000px;
+    border-collapse: collapse;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* HEADER */
+th {
+    background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+    color: #0f172a;
+    padding: 10px;
+    position: sticky;
+    top: 0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 1;
+}
+
+th:hover {
+    background: #7dd3fc;
+    color: #020617;
+    transform: scale(1.02);
+}
+
+/* CELDAS */
+td {
+    background: #1e293b;
+    padding: 8px;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+/* FILAS */
+tr:nth-child(even) td {
+    background: #334155;
+}
+
+tr:hover td {
+    background: #475569;
+}
+
+td:hover {
+    background: #64748b;
+    color: #ffffff;
+}
+
+/* PRIMERA COLUMNA */
+th:first-child,
+td:first-child {
+    position: sticky;
+    left: 0;
+    background: #020617;
+    font-weight: bold;
+    z-index: 3;
+}
+
+th:first-child {
+    background: #0284c7;
+    color: white;
+}
+
+/* FILA ACTIVA */
+.fila-activa td {
+    background: #0ea5e9 !important;
+    color: #020617;
+    font-weight: bold;
+}
