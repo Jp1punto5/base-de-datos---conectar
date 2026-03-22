@@ -54,13 +54,14 @@ document.addEventListener("DOMContentLoaded", function (){
         }
 
         if (patentes.length === 0) {
-            alert("No hay patentes para generar");
+            mostrarAlerta("No hay patentes para generar","warning");
             boton.disabled = false;
             return;
         }
 
         // Inicializar ZIP
         const zip = new JSZip();
+        let errores = [];
 
         for (let i = 0; i < patentes.length; i++) {
             const patenteActual = patentes[i];
@@ -71,20 +72,45 @@ document.addEventListener("DOMContentLoaded", function (){
             try {
                 // Generamos PDF como Blob
                 const pdfBlob = await generarCertificado(patenteActual, true); // true = retornar Blob
-                zip.file(`Certificado_${patenteActual}.pdf`, pdfBlob);
+                if(pdfBlob)
+                    {
+                        zip.file(`Certificado_${patenteActual}.pdf`, pdfBlob);
+                    }
+                else
+                {
+                    console.warn(`No se generó certificado para ${patenteActual}`);
+                    errores.push(patenteActual);
+                }
+
+                
             } catch (error) {
                 console.error(`Error con patente ${patenteActual}`, error);
             }
         }
 
         // Descargar ZIP
-        zip.generateAsync({ type: "blob" }).then(function(content) {
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(content);
-            a.download = "Certificados.zip";
-            a.click();
-        });
+        if (Object.keys(zip.files).length > 0)
+        {
+                zip.generateAsync({ type: "blob" }).then(function(content) {
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(content);
+                a.download = "Certificados.zip";
+                a.click();
+            });
+            mostrarAlerta("Certificados generados correctamente", "success");
+            document.getElementById("inputPatentes").value = "";
+            document.getElementById("filtro2").value = "";
+        }
+        else 
+        {
+            mostrarAlerta("No se generó ningún certificado válido", "warning");
+        }
 
+
+        if (errores.length > 0) 
+            {
+                mostrarAlerta("No se generaron certificados para las siguientes unidades:<ul><li>" + errores.join("</li><li>") + "</li></ul>", "error");
+            }
         boton.disabled = false;
         boton.innerText = "Generar Certificado";
     });
@@ -117,12 +143,11 @@ async function generarCertificado(ppu, retornarBlob = false) {
             const response = await res.json();
 
             if (!response.data || response.data.length === 0) {
-                alert("No hay datos para esta patente");
-                return;
+                console.warn("No hay datos para esta patente:", patenteFinal);
+                return null;
             }
 
             const data = response.data[0];
-            console.log(data);
             const vehiculo = {
                 razon: 'SALFA - ARRENDADORA DE VEHICULOS S.A.',
                 rut: data.rut || 'Sin Rut',
@@ -308,12 +333,12 @@ async function generarCertificado(ppu, retornarBlob = false) {
             }
 
         } catch (error) {
-            console.error(error);
-            alert("Error al obtener datos del certificado");
+             console.error(error);
+             return null; 
         }
     } else {
         const error = "La patente ingresada es incorrecta";
         console.error(error);
-        alert("No se Puede generar certificado!!");
+        mostrarAlerta("No se Puede generar certificado!!","error");
     }
 }

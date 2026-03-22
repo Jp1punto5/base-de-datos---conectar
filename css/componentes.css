@@ -1,7 +1,7 @@
 /* =========================
    INPUTS Y BOTONES BASE
 ========================= */
-input, select, button {
+input, select, button, textarea {
     padding: 10px;
     margin: 5px 0;
     border-radius: 8px;
@@ -11,7 +11,7 @@ input, select, button {
 /* =========================
    INPUTS
 ========================= */
-input, select {
+input, select, textarea{
     width: 100%;
     max-width: 300px;
 
@@ -24,12 +24,15 @@ input, select {
 }
 
 /* placeholder */
-input::placeholder {
+input::placeholder,
+textarea::placeholder {
     color: #64748b;
 }
 
 /* focus */
-input:focus, select:focus {
+input:focus, 
+select:focus,
+textea:focus {
     outline: none;
     border: 1px solid #38bdf8;
     box-shadow: 0 0 0 2px rgba(56,189,248,0.3);
@@ -95,6 +98,14 @@ button i {
     max-width: 400px;
 }
 
+
+/*==========================
+    TEXTAREA
+===========================*/
+textarea {
+    min-height: 80px;
+    resize: vertical; /* permite crecer hacia abajo */
+}
 /* =========================
    🔥 VERTABLA (FILTROS PRO)
 ========================= */

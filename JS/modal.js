@@ -91,7 +91,7 @@
         .then(response => {
 
             if (!response.reporta) {
-                alert("No reporta");
+                mostrarAlerta("Vehículo:"+patente+" nunca ha reportado","error");
                 return;
             }
 
