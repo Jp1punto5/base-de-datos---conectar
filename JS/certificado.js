@@ -122,7 +122,7 @@ async function generarCertificado(ppu, retornarBlob = false) {
             }
 
             const data = response.data[0];
-
+            console.log(data);
             const vehiculo = {
                 razon: 'SALFA - ARRENDADORA DE VEHICULOS S.A.',
                 rut: data.rut || 'Sin Rut',
