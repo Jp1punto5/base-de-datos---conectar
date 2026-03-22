@@ -103,7 +103,7 @@
                 <div class="form-group">
                     <label>Patente</label>
                     <div class="edit-row">
-                        <input id="edit_patente" maxlength="8" disabled>
+                        <input id="edit_patente" data-columna="MOV_PATENTE" maxlength="8" disabled>
                         <button onclick="habilitarCampo('edit_patente')">✏️</button>
                     </div>
                 </div>
@@ -111,7 +111,7 @@
                 <div class="form-group">
                     <label>Dispositivo</label>
                     <div class="edit-row">
-                        <input id="edit_dispositivo" maxlength="20" disabled>
+                        <input id="edit_dispositivo" data-columna="MOV_IDGPS" maxlength="20" disabled>
                         <button onclick="habilitarCampo('edit_dispositivo')">✏️</button>
                     </div>
                 </div>
@@ -119,7 +119,7 @@
                 <div class="form-group">
                     <label>Chasis</label>
                     <div class="edit-row">
-                        <input id="edit_nombre" maxlength="25" disabled>
+                        <input id="edit_nombre" data-columna="MOV_NOMBRE" maxlength="25" disabled>
                         <button onclick="habilitarCampo('edit_nombre')">✏️</button>
                     </div>
                 </div>
@@ -127,7 +127,7 @@
                 <div class="form-group">
                     <label>Device ID - Satelital</label>
                     <div class="edit-row">
-                        <input id="edit_iddmr" maxlength="50" disabled>
+                        <input id="edit_iddmr" data-columna="MOV_IDDMR" maxlength="50" disabled>
                         <button onclick="habilitarCampo('edit_iddmr')">✏️</button>
                     </div>
                 </div>
@@ -135,7 +135,7 @@
                 <div class="form-group">
                     <label>Fecha ins + Soluciones</label>
                     <div class="edit-row">
-                        <input id="edit_foto" maxlength="250" disabled>
+                        <input id="edit_foto" data-columna="MOV_FOTO" maxlength="250" disabled>
                         <button onclick="habilitarCampo('edit_foto')">✏️</button>
                     </div>
                 </div>
@@ -143,7 +143,7 @@
                 <div class="form-group">
                     <label>Velocidad</label>
                     <div class="edit-row">
-                        <input id="edit_velocidad" maxlength="4" disabled>
+                        <input id="edit_velocidad" data-columna="MOV_VELMAX" maxlength="4" disabled>
                         <button onclick="habilitarCampo('edit_velocidad')">✏️</button>
                     </div>
                 </div>
@@ -152,7 +152,7 @@
                 <div class="form-group">
                     <label>Grupo 1</label>
                     <div class="edit-row">
-                        <input id="edit_grupo1" maxlength="50" disabled>
+                        <input id="edit_grupo1" data-columna="MOV_GRUPO1" maxlength="50" disabled>
                         <button onclick="habilitarCampo('edit_grupo1')">✏️</button>
                     </div>
                 </div>
@@ -160,7 +160,7 @@
                 <div class="form-group">
                     <label>Grupo 2</label>
                     <div class="edit-row">
-                        <input id="edit_grupo2" maxlength="50" disabled>
+                        <input id="edit_grupo2" data-columna="MOV_GRUPO2" maxlength="50" disabled>
                         <button onclick="habilitarCampo('edit_grupo2')">✏️</button>
                     </div>
                 </div>
@@ -168,7 +168,7 @@
                 <div class="form-group">
                     <label>Grupo 3</label>
                     <div class="edit-row">
-                        <input id="edit_grupo3" maxlength="50" disabled>
+                        <input id="edit_grupo3" data-columna="MOV_GRUPO3" maxlength="50" disabled>
                         <button onclick="habilitarCampo('edit_grupo3')">✏️</button>
                     </div>
                 </div>
@@ -176,7 +176,7 @@
                 <div class="form-group">
                     <label>Grupo 4</label>
                     <div class="edit-row">
-                        <input id="edit_grupo4" maxlength="50" disabled>
+                        <input id="edit_grupo4" data-columna="MOV_GRUPO4" maxlength="50" disabled>
                         <button onclick="habilitarCampo('edit_grupo4')">✏️</button>
                     </div>
                 </div>
@@ -192,7 +192,7 @@
 
         <div class="modal-footer">
             <button onclick="cerrarModal()">Cancelar</button>
-            <button onclick="guardarCambios()">Guardar</button>
+            <button id="btnGuardar" onclick="guardarCambios()">Guardar</button>
         </div>
 
     </div>

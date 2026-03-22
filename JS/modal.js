@@ -23,16 +23,17 @@
         }
 
         document.getElementById('edit_codigo').innerText = row.MOV_CODIGO;
-        document.getElementById('edit_patente').value = row.MOV_PATENTE;
-        document.getElementById('edit_dispositivo').value = row.MOV_IDGPS;
-        document.getElementById('edit_nombre').value = row.MOV_NOMBRE;
-        document.getElementById('edit_iddmr').value = row.MOV_IDDMR;
-        document.getElementById('edit_foto').value = row.MOV_FOTO;
-        document.getElementById('edit_velocidad').value = row.MOV_VELMAX;
-        document.getElementById('edit_grupo1').value = row.MOV_GRUPO1;
-        document.getElementById('edit_grupo2').value = row.MOV_GRUPO2;
-        document.getElementById('edit_grupo3').value = row.MOV_GRUPO3;
-        document.getElementById('edit_grupo4').value = row.MOV_GRUPO4;
+
+        setInput('edit_patente', row.MOV_PATENTE);
+        setInput('edit_dispositivo', row.MOV_IDGPS);
+        setInput('edit_nombre', row.MOV_NOMBRE);
+        setInput('edit_iddmr', row.MOV_IDDMR);
+        setInput('edit_foto', row.MOV_FOTO);
+        setInput('edit_velocidad', row.MOV_VELMAX);
+        setInput('edit_grupo1', row.MOV_GRUPO1);
+        setInput('edit_grupo2', row.MOV_GRUPO2);
+        setInput('edit_grupo3', row.MOV_GRUPO3);
+        setInput('edit_grupo4', row.MOV_GRUPO4);
 
         resetInputs();
 
@@ -47,6 +48,13 @@
             mapModal.setZoom(13);
 
         }, 300);
+    }
+
+    // la siguiente funcion permite asignacion mas rapida a un input
+    function setInput(id, valor) {
+        const input = document.getElementById(id);
+        input.value = valor;
+        input.dataset.original = valor;
     }
 
     function cargarMapaInicial() {
@@ -170,26 +178,88 @@
 
         });
     }
+    async function guardarCambios() {
+        const patente = document.getElementById("edit_codigo").innerText;
+        const boton = document.getElementById("btnGuardar");
+        const textoOriginal = boton.innerText;
 
-    function guardarCambios() {
-        patente = document.getElementById("edit_codigo").innerText;
-
-        //variables del MODAL
-        const m_patente = document.getElementById("edit_patente").value;
-        const m_idgps   = document.getElementById("edit_dispositivo").value;
-        const m_nombre  = document.getElementById("edit_nombre").value;
-        const m_sateli  = document.getElementById("edit_iddmr").value;
-        const m_foto    = document.getElementById("edit_foto").value;
-        const m_vel     = document.getElementById("edit_velocidad").value;
-        const m_grupo1  = document.getElementById("edit_grupo1").value;
-        const m_grupo2  = document.getElementById("edit_grupo2").value;
-        const m_grupo3  = document.getElementById("edit_grupo3").value;
-        const m_grupo4  = document.getElementById("edit_grupo4").value;
+        // 🔹 Detectar todos los inputs dentro del modal que tengan data-columna
+        const inputs = document.querySelectorAll('#modalEditar input[data-columna]');
         
+        // Filtrar los que realmente van a cambiar
+        const inputsACambiar = Array.from(inputs).filter(input => 
+            !input.disabled && input.value.toUpperCase() !== input.dataset.original
+        );
 
+        if (inputsACambiar.length === 0) {
+            mostrarAlerta("No se detectaron cambios", "warning");
+            return;
+        }
 
-        console.log(patente,m_patente);
+        let i = 0;
+
+        try {
+            for (const input of inputsACambiar) {
+                i++;
+
+                // 🔹 Contador en el botón
+                boton.innerText = `Guardando ${i} de ${inputsACambiar.length}...`;
+
+                const valorActual = input.value;
+                const valorMayus = valorActual.toUpperCase();
+                const columna = input.dataset.columna;
+
+                try {
+                    const response = await fetch("http://127.0.0.1:5000/actualizar-imei", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            session_id: session_id,
+                            database: database,
+                            patenteFinal: patente,
+                            columna: columna,
+                            parametro: valorMayus
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (!response.ok) {
+                        throw new Error(data.error || "Error en la API");
+                    }
+
+                    // 🔹 Capturar mensaje SQL (éxito o error)
+                    if (data.data && data.data[0]) {
+                        const mensaje = Object.values(data.data[0])[0];
+                        console.log("Mensaje SQL:", mensaje);
+
+                        if (mensaje.startsWith("Error")) {
+                            throw new Error(mensaje);
+                        } else {
+                            mostrarAlerta(mensaje, "success");
+                        }
+                    }
+
+                    // 🔹 Actualizar input: valor visual + dataset + bloquear
+                    input.value = valorMayus;
+                    input.dataset.original = valorMayus;
+                    input.disabled = true;
+
+                } catch (campoError) {
+                    // 🔹 Restaurar el valor original en caso de error
+                    input.value = input.dataset.original;
+                    input.disabled = true;
+                    mostrarAlerta(campoError.message, "error");
+                    // detener el loop si quieres, o comentar la siguiente línea para continuar con otros campos
+                    break;
+                }
+            }
+        } finally {
+            // 🔹 Restaurar texto original del botón
+            boton.innerText = textoOriginal;
+        }
     }
+
 
     function hacerModalMovible() {
         const modal = document.querySelector(".modal-content");

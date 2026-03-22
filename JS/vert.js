@@ -318,7 +318,7 @@ function cargarDatos() {
 
     const filtro1 = document.getElementById('filtro1').value;
     const filtro2 = document.getElementById('filtro2').value;
-    // let filtropatente = validarPatente(filtro2);
+    let filtropatente = filtro2;
 
     const limite = document.getElementById('limite').value || 10;
 
@@ -332,7 +332,7 @@ function cargarDatos() {
             database,
             tabla,
             filtro1,
-            filtro2,
+            filtropatente,
             limite
         })
     })
