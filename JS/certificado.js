@@ -339,6 +339,6 @@ async function generarCertificado(ppu, retornarBlob = false) {
     } else {
         const error = "La patente ingresada es incorrecta";
         console.error(error);
-        mostrarAlerta("No se Puede generar certificado!!","error");
+        // mostrarAlerta("No se Puede generar certificado!!","error");
     }
 }

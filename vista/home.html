@@ -37,6 +37,7 @@
         <button onclick="abrirTabla('MOVILES_EQUIPAMIENTO')">MOVILES_EQUIPAMIENTO</button>
         <br>
         <button onclick="abrirTabla('reportabilidad')">Validar Reportabilidad</button>
+        <button onclick="abrirTabla('INTEGRACIONES')">Mantenedor de Integraciones</button>
     </div>
 
 </div>
@@ -73,6 +74,11 @@ function conectar() {
     .catch(err => {
         document.getElementById('estado').innerText = "❌ Error conexión";
         console.error(err);
+        const tablas = document.getElementById('tablas');
+        if (tablas.style.display === "block")
+    {
+        tablas.style.display = "none";
+    }
     });
 }
 

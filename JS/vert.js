@@ -198,11 +198,15 @@ function renderTabla(data, columnas) {
     columnas.forEach((col) => {
         const th = document.createElement('th');
 
+        // Cambiar el nombre de la columna si es "id_tipointegracion"
+        if (col.toLowerCase() === "id_tipointegracion") {
+            col = "Nombre Integración"; // Cambiar el nombre de la columna
+        }
+
         let indicador = "";
         if (col === columnaActiva) {
             indicador = ordenAsc ? " ↑" : " ↓";
         }
-
         th.innerText = col + indicador;
         th.onclick = () => ordenarPor(col);
 
@@ -253,7 +257,26 @@ function renderTabla(data, columnas) {
 
                 td.appendChild(link);
 
-            } else 
+            } else if (col.toLowerCase() === "id_tipointegracion") 
+            {
+                console.log("llegamos a la columna Nombre Integración");
+                console.log("row[col] =", row[col]);
+                // Array con los datos de las integraciones
+                const integraciones = 
+                [
+                    {id : "41", nombre : "API - Samtech"},
+                    {id:"47", nombre : "API - GPSChile - (GPS)"},
+                    {id:"98", nombre : "API - Lomas Bayas"},
+                    {id:"107" , nombre:"API - OWL Caserones"},
+                    {id: "110", nombre: "API - Tracktec MEL Escondida"},
+                    {id:"111", nombre : "API - OWL Codelco (El Teniente)"}
+                ]
+                 // Buscar el nombre de la integración usando el ID
+                 const integracion = integraciones.find(integracion => String(integracion.id) === String(row[col]));
+                  // Si encontramos el ID, asignamos el nombre, si no, mostramos el ID
+                 td.innerText = integracion ? integracion.nombre : row[col];
+            }  
+            else 
              {
                     td.innerText = row[col];
              }
@@ -346,7 +369,7 @@ function cargarDatos() {
 
         const data = response.data;
         const columnas = response.columnas;
-        console.log(columnas);
+        console.log(columnas); // esto me muestra en consola el nombre de todas las columnas de la tabla de turno
         document.getElementById('estado').innerText = `✅ ${data.length} registros`;
 
         datosGlobal = data;

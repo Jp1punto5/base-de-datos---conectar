@@ -136,6 +136,26 @@ def obtener_tabla():
                     query += f" where mov_codigo like '%{filtro2}%'"
 
             
+            if tabla == "INTEGRACIONES":
+
+                query = f"""
+                    select top {limite} mu.* from MultiReplicas_MOVILES mm
+                    inner join MultiReplicas_MOVILES_TIPOINTEGRACION mu
+                    on mm.MOV_CODIGO = mu.MOV_CODIGO
+                    where mm.ESTADO = 1
+                """
+                if filtro2:
+                    query += f" and mm.mov_codigo = '{filtro2}'"
+                    if filtro1:
+                        query += f" and mu.ID_TipoIntegracion like '%{filtro1}%'"
+
+                if filtro1 and not filtro2:
+                    query += f" and mu.ID_TipoIntegracion like '%{filtro1}%'"
+
+                query += " order by mu.ID_TipoIntegracion asc"
+
+
+            
             if tabla == "reportabilidad":
                 query = f"""
                 select 
