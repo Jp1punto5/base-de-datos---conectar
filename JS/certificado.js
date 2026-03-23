@@ -149,7 +149,7 @@ async function generarCertificado(ppu, retornarBlob = false) {
 
             const data = response.data[0];
             const vehiculo = {
-                razon: 'MITTA S.A',
+                razon: 'SALFA - ARRENDADORA DE VEHICULOS S.A.',
                 rut: data.rut || 'Sin Rut',
                 patente: data.patente || '',
                 gps: data.imei || '',
