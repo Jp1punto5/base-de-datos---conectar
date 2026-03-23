@@ -172,6 +172,7 @@ function resaltarMarker(index) {
     google.maps.event.trigger(marker, "click");
 }
 
+// esta funcion permite seleccionar la fila para mostrar sus datos en el mapa
 function resaltarFila(index) {
     const filas = document.querySelectorAll("#tabla tr");
     filas.forEach(f => f.classList.remove("fila-activa"));

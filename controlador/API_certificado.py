@@ -200,7 +200,7 @@ def crear_certificado():
 
                     -- identificamos si existe la integracion de gausscontrol o GPSChile Mobicua
 
-                    if object_id('tempdb..gausscontrol_moviles') is not null
+                    if object_id('gausscontrol_moviles') is not null
                     begin
                     -- gausscontrol
                         insert into #integracion (patente,intregra)
@@ -214,7 +214,7 @@ def crear_certificado():
                             and gm.ESTADO =  1
                     end
 
-                    if object_id('tempdb..WinS_GpsChileFatiga_Moviles') is not null
+                    if object_id('WinS_GpsChileFatiga_Moviles') is not null
                     begin
                         -- GPSChile Mobicua
                          insert into #integracion (patente,intregra)
