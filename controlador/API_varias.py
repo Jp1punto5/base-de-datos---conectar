@@ -116,14 +116,20 @@ def obtener_tabla():
                 query = f"""
                 select TOP {limite}
                    *
-                 from moviles
-                 where mov_idgps <> '9999'"""
+                 from moviles 
+                 """
                 if filtro1:
-                    query += f" and mov_foto like '%{filtro1}%'"
+                    query += f" where mov_foto like '%{filtro1}%' and mov_idgps <>'9999'"
+                    if filtro2:
+                        query += f" and mov_Codigo like '%{filtro2}%'"
 
-                if filtro2:
-                    query += f" and mov_codigo like '%{filtro2}%'"
 
+
+                if filtro2 and not filtro1:
+                    query += f" where mov_codigo like '%{filtro2}%'"
+                    
+
+                query += " order by mov_idgps desc"
                 
             if tabla == "MOVILES_EQUIPAMIENTO":
             # ⚠️ filtro (uso controlado)
@@ -137,7 +143,6 @@ def obtener_tabla():
 
             
             if tabla == "INTEGRACIONES":
-
                 query = f"""
                     select top {limite} mu.* from MultiReplicas_MOVILES mm
                     inner join MultiReplicas_MOVILES_TIPOINTEGRACION mu
@@ -256,16 +261,17 @@ def obtener_tabla():
                 from moviles m
                 left join movil_ult_posicion ul 
                 on m.mov_codigo = ul.mov_Codigo
-                where m.mov_idgps <> '9999'
                 """
 
                 if filtro1:
-                    query += f" and m.mov_nombre like '%{filtro1}%'"
+                    query += f" where m.mov_nombre like '%{filtro1}%'"
                     if filtro2:
                         query += f" and m.mov_codigo like '%{filtro2}%'"
                 
                 if filtro2 and not filtro1:
-                    query += f" and m.mov_codigo like '%{filtro2}%'"
+                    query += f" where m.mov_codigo like '%{filtro2}%'"
+
+                query += " order by m.mov_idgps asc"
 
 
             cursor.execute(query)

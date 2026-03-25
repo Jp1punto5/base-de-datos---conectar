@@ -105,7 +105,18 @@
 
             const data = response.data;
             let estado_ing = "";
+            // con este bloque if podemos identificar si la antena se encuentra valida o no
+            let antena = data.mopo_estado;
+            if (antena === "A")
+            {
+                antena = "Valida";
+            }
+            else 
+            {
+                antena = "Invalida";
+            }
             console.log("estado ignicion:",data.Mopo_Estado_Ignicion);
+            console.log("estado antena:",data.mopo_estado);
             if (data.Mopo_Estado_Ignicion)
             {
                 estado_ing = "Encendido";
@@ -162,12 +173,19 @@
                             </div>   
                            
                             <div class="item">
-                                <i class="fa-solid fa-gauge"></i>
+                                <i class="fa-solid fa-key"></i>
                                 <div>
                                     <small>Estado Ignición</small>
                                     <span class="evento">${estado_ing}</span>
                                 </div>
                             </div>  
+                             <div class="item">
+                                <i class="fa-solid fa-tower-broadcast"></i>
+                                <div>
+                                    <small>Estado Antena</small>
+                                    <span class="evento">${antena}</span>
+                                </div>
+                            </div> 
 
                         </div>
                     </div>
@@ -236,6 +254,12 @@
                         if (mensaje.startsWith("Error")) {
                             throw new Error(mensaje);
                         } else {
+
+                            // validamos si se cambia la mov_foto para disparar el agregar equipamientos
+                            if (columna === "MOV_FOTO")
+                            {
+                                agregarEquipamiento(patente);
+                            }
                             mostrarAlerta(mensaje, "success");
                         }
                     }
@@ -257,6 +281,43 @@
         } finally {
             // 🔹 Restaurar texto original del botón
             boton.innerText = textoOriginal;
+        }
+    }
+
+
+
+    // vamos a crear funcion para consumir la API que inserta los equipamientos
+    async function agregarEquipamiento(patente) {
+        const response = await fetch("http://127.0.0.1:5000/equipamientos", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                session_id: session_id,   // tu variable global
+                database: database,       // tu variable global
+                patente: patente
+            })
+        });
+
+        const data = await response.json();
+
+        // 🔹 Si la API devuelve un error HTTP
+        if (!response.ok) {
+            mostrarAlerta(data.error || "Error en la API", "error");
+            return;
+        }
+
+        // 🔹 Tomar directamente el mensaje que retorna la API
+        if (data.data && data.data[0]) {
+            const mensaje = Object.values(data.data[0])[0];
+
+            // 🔹 Mostrar alerta, sea éxito o error, exactamente como vino
+            if (mensaje.toLowerCase().startsWith("exito")) {
+                mostrarAlerta(mensaje, "success");
+            } else {
+                mostrarAlerta(mensaje, "error");
+            }
+        } else if (data.error) {
+            mostrarAlerta(data.error, "error");
         }
     }
 

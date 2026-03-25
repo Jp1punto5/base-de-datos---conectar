@@ -342,11 +342,24 @@ function cargarDatos() {
 
     const filtro1 = document.getElementById('filtro1').value;
     const filtro2 = document.getElementById('filtro2').value;
-    let filtropatente = filtro2;
+    let filtropatente = filtro2.trim();
+    // console.log("valor:", filtropatente);
+    // console.log("length:", filtropatente.length);
+    // console.log("chars:", filtropatente.split(""));
+    // console.log("includes -:", filtropatente.includes("-"));
+   
+        if (filtropatente.length === 6 && !filtropatente.includes("-") || filtropatente.length === 6)
+        {
+            filtropatente = filtropatente.slice(0,4)+"-"+filtropatente.slice(4,6);
+        }
+
+  
 
     const limite = document.getElementById('limite').value || 10;
 
     document.getElementById('estado').innerText = "⏳ Cargando...";
+    console.log("Tabla:" + tabla);
+
 
     fetch('http://127.0.0.1:5000/tabla', {
         method: 'POST',
@@ -360,6 +373,7 @@ function cargarDatos() {
             limite
         })
     })
+
     .then(res => res.json())
     .then(response => {
 
@@ -371,6 +385,7 @@ function cargarDatos() {
         const data = response.data;
         const columnas = response.columnas;
         console.log(columnas); // esto me muestra en consola el nombre de todas las columnas de la tabla de turno
+        console.log(data);
         document.getElementById('estado').innerText = `✅ ${data.length} registros`;
 
         datosGlobal = data;

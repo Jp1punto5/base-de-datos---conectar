@@ -3,6 +3,7 @@ from flask_cors import CORS
 from controlador.API_varias import varias_bp
 from controlador.API_certificado import cert_bp
 from controlador.API_actualizarImei import actuaImei_bp
+from controlador.API_Equipamiento import equip_bp
 
 import pyodbc
 
@@ -15,6 +16,7 @@ CORS(app)
 app.register_blueprint(varias_bp)
 app.register_blueprint(cert_bp)
 app.register_blueprint(actuaImei_bp)
+app.register_blueprint(equip_bp)
 
 @app.route('/')
 def home():

@@ -153,7 +153,7 @@ async function generarCertificado(ppu, retornarBlob = false) {
                 rut: data.rut || 'Sin Rut',
                 patente: data.patente || '',
                 gps: data.imei || '',
-                modelogps: data.modelo || 'GPS EXTERNO',
+                // modelogps: data.modelo || 'GPS EXTERNO',
                 reporte: data.ult_repo || 'Sin información',
                 equip: data.equip || 'Sin registro',
                 integracion: data.integracion || 'Sin integración'
@@ -240,7 +240,7 @@ async function generarCertificado(ppu, retornarBlob = false) {
             drawBlock("RUT", vehiculo.rut);
             drawBlock("PATENTE", vehiculo.patente);
             drawBlock("GPS", vehiculo.gps);
-            drawBlock("MODELO GPS", vehiculo.modelogps);
+            // drawBlock("MODELO GPS", vehiculo.modelogps);
             drawBlock("FECHA ÚLTIMO REPORTE", vehiculo.reporte);
             drawBlock("EQUIPAMIENTO", vehiculo.equip.toUpperCase());
             drawBlock("INTEGRACIÓN", vehiculo.integracion.toUpperCase());

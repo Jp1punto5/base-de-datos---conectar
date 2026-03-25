@@ -102,8 +102,8 @@ def crear_certificado():
                     when Id_Equipamiento = 62 then 'MOBICUA AIO (SOMNOLENCIA + TERCER OJO)'
                     when Id_Equipamiento = 63 then 'MOBICUA DMS (SOMNOLENCIA)'
                     when Id_Equipamiento = 64 then 'MOBICUA ADAS (TERCER OJO)'
-                    when Id_Equipamiento = 65 then 'DRIVERZEN (SOMNOLENCIA + TERCER OJO + CÁMARA FRONTAL 48 HRS.)'
-                    when Id_Equipamiento = 66 then 'DRIVENZEN 360 (SOMNOLENCIA + TERCER OJO + CÁMARA FRONTAL 48 HRS. + CÁMARA EN CABINA 48 HRS.)'
+                    when Id_Equipamiento = 65 then 'DRIVERZEN (SOMNOLENCIA + TERCER OJO + CÁMARA FRONTAL)'
+                    when Id_Equipamiento = 66 then 'DRIVENZEN 360 (SOMNOLENCIA + TERCER OJO + CÁMARA FRONTAL + CÁMARA EN CABINA)'
                     when id_equipamiento = 51 then 'CÁMARA MDVR'
                     when id_equipamiento = 25 then 'ACELERÓMETRO 3 EJES'
                     else Valor_Equipamiento

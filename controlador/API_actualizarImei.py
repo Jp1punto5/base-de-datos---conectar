@@ -40,7 +40,7 @@ def actualizar():
 
                         if @columna = 'MOV_IDGPS'
                         begin
-                                if exists (select * from moviles where MOV_IDGPS = @param and MOV_CODIGO <> @patente)
+                                if exists (select * from moviles where MOV_IDGPS <> '9999' AND MOV_IDGPS = @param and MOV_CODIGO <> @patente)
                                 begin
                                     select 'Error: Dispositivo Ya existe - ingrese otro'
                                 end
