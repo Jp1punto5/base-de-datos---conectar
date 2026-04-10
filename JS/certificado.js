@@ -44,8 +44,25 @@ document.addEventListener("DOMContentLoaded", function (){
 
         // Separar por líneas si hay contenido en textarea
         let patentes = [];
+        let seen = new Set();
         if (textareaValue) {
-            patentes = textareaValue.split(/\r?\n/).map(p => p.trim()).filter(p => p);
+                 patentes = textareaValue
+                 .split(/[\n,\/]+/)
+                 .reduce((acc,p) => {
+                    const limpia = p.trim().replace(/\s+/g,'').replace(/[^a-zA-Z0-9]/g, '');
+                    if(!limpia) return acc;
+
+                    const valida = validarPatente(limpia);
+                    if (valida && !seen.has(valida))
+                    {
+                        seen.add(valida);
+                        acc.push(valida);
+                    }
+
+                    return acc;
+
+                 },[]
+                );
         }
 
         // Agregar la patente individual si existe
@@ -125,6 +142,7 @@ async function generarCertificado(ppu, retornarBlob = false) {
     const { jsPDF } = window.jspdf;
     const patente = document.getElementById("filtro2").value;
     let patenteFinal;
+    let correofinal;
 
     if(ppu) {
         patenteFinal = validarPatente(ppu);
@@ -146,10 +164,13 @@ async function generarCertificado(ppu, retornarBlob = false) {
                 console.warn("No hay datos para esta patente:", patenteFinal);
                 return null;
             }
-
+            
             const data = response.data[0];
+            console.log("datos certificado: ", data);
+
+            correofinal = data.correo;
             const vehiculo = {
-                razon: 'SALFA - ARRENDADORA DE VEHICULOS S.A.',
+                razon: data.razonSocial || 'Buscar Datos',
                 rut: data.rut || 'Sin Rut',
                 patente: data.patente || '',
                 gps: data.imei || '',
@@ -258,6 +279,7 @@ async function generarCertificado(ppu, retornarBlob = false) {
 
             const hoy = new Date();
             const vencimiento = new Date();
+            // fecha vencimiento certificado
             vencimiento.setMonth(vencimiento.getMonth() + 6); // aqui puedo bajar o aumentar los meses de durabilidad
             const fechaVencimiento = vencimiento.toLocaleDateString('es-CL');
 
@@ -279,8 +301,14 @@ async function generarCertificado(ppu, retornarBlob = false) {
             doc.text("MIGPS SPA", 105, y + 37, { align: "center" });
 
             // ================= FOOTER =================
-            const alinFoter = 17;
+
+            let alinFoter = 14;
             const yFooter = 267;
+
+            if (correofinal === "sacsalfa@wisetrackcorp.com")
+            {
+                alinFoter = 17
+            }
 
             doc.setFontSize(8);
             let aa = alinFoter;
@@ -301,7 +329,7 @@ async function generarCertificado(ppu, retornarBlob = false) {
             aa += doc.getTextWidth(text3);
 
             doc.setFont("helvetica", "bold");
-            doc.text("sacsalfa@wisetrackcorp.com", aa, yFooter);
+            doc.text(correofinal, aa, yFooter);
 
             const fechaStr = hoy.toLocaleDateString('es-CL');
             const textoFooter = fechaStr + " - Marchant Pereira 201, piso 9 y 10, Providencia, Santiago";
