@@ -14,6 +14,8 @@
     <script src="../JS/certificado.js"></script>
     <script src="../JS/alertas.js"></script>
     <script src="../JS/APIkeyMaps.js"></script>
+    <script src="../JS/login-db.js"></script>
+    <script src="../JS/GenerarExcel.js"></script>
 </head>
 <body class="vertabla">
 
@@ -23,7 +25,9 @@
         <h2 id="titulo"></h2>
 
         <div class="filtros-container">
-
+             <button id="id_home">
+               Home
+            </button>
             <div class="input-icon">
                 <i class="fas fa-list-ol"></i>
                 <input type="number" id="limite" value="10">
@@ -31,7 +35,7 @@
 
             <div class="input-icon">
                 <i class="fas fa-car"></i>
-                <input type="text" id="filtro2" maxlength="7" placeholder="Patente">
+                <input type="text" id="filtro2" maxlength="8" placeholder="Patente">
             </div>
             
             <div class="input-icon">
@@ -47,14 +51,25 @@
             <button id="btnCertificado">
                Descargar Certificado
             </button>
-            <h3>Ingresar Patentes para generar Certificado</h3>
+            <br> <h3>Listar Patentes...</h3>
             <textarea id="inputPatentes" placeholder="Pega las patentes aquí, una por línea"></textarea>
 
             <!--aqui termina el boton para el certificado-->
 
+                <div id="tablas" class="card"">
+                <h3>MODULOS disponibles</h3>
+
+                <button id="id_movil" onclick="abrirTabla('MOVILES')">MOVILES</button>
+                <button id="id_me" onclick="abrirTabla('MOVILES_EQUIPAMIENTO')">MOVILES_EQUIPAMIENTO</button>
+                <br>
+                <button id="id_repo" onclick="abrirTabla('reportabilidad')">Validar Reportabilidad</button>
+                <button id="id_inte" onclick="abrirTabla('INTEGRACIONES')">Mantenedor de Integraciones</button>
+            </div>
+
             <div class="input-icon buscador">
                 <i class="fas fa-search"></i>
                 <input type="text" id="busquedaTabla" placeholder="Buscar en la tabla..." onkeyup="filtrarTabla()">
+                <button id="btn-descargar" onclick="descargarExcel()" >Descargar Excel</button>
             </div>
 
         </div>
@@ -98,10 +113,13 @@
             <div class="modal-form-scroll">
 
                 <div class="form-group">
-                    <label>Código</label>
+                    <label>Código = </label>
                     <span id="edit_codigo"></span>
                 </div>
-
+              <div class="form-group">
+                    <label>Simcard = </label>
+                    <span id="edit_simcard"></span>
+                </div>
                 <div class="form-group">
                     <label>Patente</label>
                     <div class="edit-row">
@@ -204,5 +222,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script><!-- esto es para generar PDFs-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script> <!-- esto es para generar comprimidos ZIP-->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.4/xlsx.full.min.js"></script>
+ <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
 </body>
 </html>
