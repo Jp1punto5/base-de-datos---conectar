@@ -140,7 +140,7 @@ Endpoints disponibles (ejemplo):
 * `/estado-dispositivo`
 * `/listar-bd`
 * `/certificado`
-* `/equipamientos` -- aun esta en desarrollo
+* `/equipamientos` -- En produccion
 
 ---
 
