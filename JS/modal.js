@@ -23,7 +23,15 @@
         }
 
         document.getElementById('edit_codigo').innerText = row.MOV_CODIGO;
-
+        if (!row.MOV_SIMCARD)
+        {
+            document.getElementById("edit_simcard").innerText = "Sin datos";
+        }
+        else
+        {
+            document.getElementById("edit_simcard").innerText = row.MOV_SIMCARD;
+        }
+        
         setInput('edit_patente', row.MOV_PATENTE);
         setInput('edit_dispositivo', row.MOV_IDGPS);
         setInput('edit_nombre', row.MOV_NOMBRE);
