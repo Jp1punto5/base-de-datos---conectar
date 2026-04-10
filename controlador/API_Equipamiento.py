@@ -227,7 +227,7 @@ def agregar_equipamiento():
                             begin
                         -- Se valida si existe alguna integración para asignar el equipamiento 68 que corresponde a este tipo de estatus
 
-                                if exists (select top 1 * from MultiReplicas_MOVILES_TIPOINTEGRACION where ID_TipoIntegracion <> 129 and MOV_CODIGO in (select MOV_CODIGO from #TablaComplemento) )
+                                if exists (select top 1 * from MultiReplicas_MOVILES_TIPOINTEGRACION where ID_TipoIntegracion <> 129 and MOV_CODIGO in (select MOV_CODIGO from #movil) )
                                 begin
                                     update #equipamientos
                                     set Integracion = 68 -- ID correspondiente al equipamiento "integración"
@@ -302,7 +302,7 @@ def agregar_equipamiento():
                                 inner join #movil m
                                 on m.patente = le.patente
                                 left join #modelosGps mg
-                                on m.imei like '%'+mg.imei+'%'
+                                on m.imei like mg.imei+'%'
                                 LEFT JOIN [DbLink_To_fZonas].[Gps_User_Adm].[dbo].[Equipamiento] EQ 
                                 on eq.id_equipamiento = le.id_equi
                                 
