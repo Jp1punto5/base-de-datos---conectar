@@ -3,7 +3,12 @@ let markers = [];
 let markerSeleccionado = null;
 let infoWindow;   // mapa principal
 
-// ---------------- PARAMETROS ----------------
+//--------- Volver al Home -------------
+document.getElementById("id_home").onclick = function() {
+    window.location.href = "home.html";
+}
+
+// ---------------- PARAMETROS RECIBIDOS ----------------
 
 const params = new URLSearchParams(window.location.search);
 
@@ -11,7 +16,24 @@ const tabla = params.get('tabla');
 const session_id = params.get('session_id');
 const database = params.get('database');
 
+// almacenamos los datos en localStore de la pagina actual para reutilizar la navecación entre modulos
+    if (session_id && database) {
+        localStorage.setItem('session_id', session_id);
+        localStorage.setItem('database', database);
+    }
+
 document.getElementById('titulo').innerText = "Tabla: " + tabla.toUpperCase();
+
+
+// --- mostramos en consola los datos recibidos previamente ---------
+    if(session_id && database)
+    {
+        console.log("id de la sesion:",session_id);
+        console.log("base de datos: ",database);
+    }
+
+
+
 
 
 // 🔥 PLACEHOLDER DINÁMICO
@@ -270,7 +292,10 @@ function renderTabla(data, columnas) {
                     {id:"98", nombre : "API - Lomas Bayas"},
                     {id:"107" , nombre:"API - OWL Caserones"},
                     {id: "110", nombre: "API - Tracktec MEL Escondida"},
-                    {id:"111", nombre : "API - OWL Codelco (El Teniente)"}
+                    {id:"111", nombre : "API - OWL Codelco (El Teniente)"},
+                    {id:"130", nombre:"API - SKYNAV PELAMBRES"},
+                    {id:"95", nombre: "API - SKYNAV CENTINELA"},
+                    {id:"113", nombre:"API - SKYNAV ANTUCOYA"}
                 ]
                  // Buscar el nombre de la integración usando el ID
                  const integracion = integraciones.find(integracion => String(integracion.id) === String(row[col]));
@@ -341,8 +366,8 @@ function cargarDatos() {
     }
 
     const filtro1 = document.getElementById('filtro1').value;
-    const filtro2 = document.getElementById('filtro2').value;
-    let filtropatente = filtro2.trim();
+    const filtro2 = document.getElementById('filtro2'); // aqui obtengo el INPUT
+    let filtropatente = filtro2.value.trim(); // aqui asigno el valor ingresado por el usuario.
     // console.log("valor:", filtropatente);
     // console.log("length:", filtropatente.length);
     // console.log("chars:", filtropatente.split(""));
@@ -353,9 +378,87 @@ function cargarDatos() {
             filtropatente = filtropatente.slice(0,4)+"-"+filtropatente.slice(4,6);
         }
 
-  
+    // creamos variable que contendra el listado de patentes si existen
+    const listPatente = document.getElementById("inputPatentes");
 
-    const limite = document.getElementById('limite').value || 10;
+    const textareaValue = listPatente.value.trim();
+
+    let patentes = [];
+    let errorPatente = [];
+    let seen = new Set();
+    
+    if (textareaValue) {
+        patentes = textareaValue
+            .split(/[\n,\/]+/) 
+            .reduce((acc, p) => {
+                // lo que hace el trim es eliminar espacios de inicio y los de fin NO los del medio
+                const limpia = p.trim().replace(/\s+/g,'').replace(/[^a-zA-Z0-9]/g, '');
+                if (!limpia) return acc;
+                // a continuación verificamos primero si el dato entregado es o no un VIN | OJO no es un validar vin, solo detecta un caracter de largo 7 u 8 sin guion y lo deja entrar
+                if (!limpia.includes("-") && [7, 8].includes(limpia.length))
+                {
+                    seen.add(limpia);
+                    acc.push(limpia);
+                    console.log("dato: " + limpia);
+                }
+                else
+                {
+                    const validada = validarPatente(limpia);
+                    if (validada && !seen.has(validada)) {
+                        seen.add(validada);
+                        acc.push(validada);
+                    }else
+                    {
+                        errorPatente.push(limpia);
+                    }
+                }
+
+                return acc;
+            }, []);
+        
+
+        
+
+    }
+
+
+    if (filtropatente || patentes.length >0)
+    {
+        console.log("dato del filtro2: "+ filtropatente);
+            if (!filtropatente.includes("-") && [7, 8].includes(filtropatente.length))
+            {
+                patentes.push(filtropatente);
+            } else if (filtropatente)
+            {
+                
+                // se crea una variable para validar la patente del filtro2
+                const validarFiltro2 = validarPatente(filtropatente);
+                // si la patente es valida se asigna al array que se envía a la API
+                if (validarFiltro2)
+                {
+                    patentes.push(validarFiltro2);
+                }
+                else // si la patente no es valida, se agrega al array de errores
+                {
+                    errorPatente.push(filtropatente);
+                }
+                 
+            }
+        // aqui lo que hacemos, es limpiar y al mismo tiempo asignar nuevos valores a la variable que sera enviada para consumir la API /tabla
+        filtropatente = patentes;
+    }
+
+     // aqui validamos si existen datos en el array errorPatente que contendra las unidades mal ingresadas
+    if (errorPatente.length > 0) 
+    {
+        mostrarAlerta("No se encontraron las siguientes unidades:<ul><li>" + errorPatente.join("</li><li>") + "</li></ul>", "error");
+    }
+   // aqui limpiamos los campos para eliminar los datos ya buscados
+    filtro2.value = "";
+    listPatente.value = "";
+  
+    console.log("datos que se quieren enviar como patente: " + filtropatente);
+    const limite = Number(document.getElementById('limite').value) || 10;
 
     document.getElementById('estado').innerText = "⏳ Cargando...";
     console.log("Tabla:" + tabla);
@@ -395,6 +498,20 @@ function cargarDatos() {
 
         const layout = document.querySelector(".layout-mapa");
         const mapaContainer = document.querySelector(".mapa-container");
+
+        // este mensaje de exito es cuando si se encuentra la o las unidades
+        if(data.length !== limite && data.length > 0)
+        {
+
+            if (data.length===1)
+            {
+                mostrarAlerta(data.length+" Vehículo encontrado","success");
+            }
+            else {
+                     mostrarAlerta(data.length+" Vehículos encontrados","success");
+            }    
+        }
+ 
 
         if (tabla.toLowerCase() === "reportabilidad") {
 
