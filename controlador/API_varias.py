@@ -99,9 +99,15 @@ def obtener_tabla():
         database = data['database']
         tabla = data['tabla']
         filtro1 = data.get('filtro1', '')
-        filtro2 = data.get('filtropatente','')
+        filtro2 = data.get('filtropatente',[])
         limite = int(data.get('limite', 10))  # 🔥 nuevo
 
+        # aqui verificamos si existen patentes a buscar, de esta forma las listamos todas sin problemas de limite
+        if filtro2 and tabla =="MOVILES" or tabla == "reportabilidad" or tabla == "INTEGRACIONES":
+            limite = len(filtro2)
+
+        #vamos a manipular el array de patentes
+        placeholders = ",".join(["?"] * len(filtro2))
         # ⚠️ validación básica (muy importante)
         if limite <= 0 or limite > 1000:
             limite = 10
@@ -121,12 +127,12 @@ def obtener_tabla():
                 if filtro1:
                     query += f" where mov_foto like '%{filtro1}%' and mov_idgps <>'9999'"
                     if filtro2:
-                        query += f" and mov_Codigo like '%{filtro2}%'"
+                        query += f" and mov_Codigo in ({placeholders})"
 
 
 
                 if filtro2 and not filtro1:
-                    query += f" where mov_codigo like '%{filtro2}%'"
+                    query += f" where mov_codigo in ({placeholders})"
                     
 
                 query += " order by mov_idgps desc"
@@ -136,10 +142,10 @@ def obtener_tabla():
                 if filtro1:
                     query += f" WHERE valor_equipamiento like '%{filtro1}%'"
                     if filtro2:
-                        query += f" and mov_codigo like '%{filtro2}%'"
+                        query += f" and mov_codigo in ({placeholders})"
                 
                 if filtro2 and not filtro1:
-                    query += f" where mov_codigo like '%{filtro2}%'"
+                    query += f" where mov_codigo in ({placeholders})"
 
             
             if tabla == "INTEGRACIONES":
@@ -150,7 +156,7 @@ def obtener_tabla():
                     where mm.ESTADO = 1
                 """
                 if filtro2:
-                    query += f" and mm.mov_codigo = '{filtro2}'"
+                    query += f" and mm.mov_codigo in ({placeholders})"
                     if filtro1:
                         query += f" and mu.ID_TipoIntegracion like '%{filtro1}%'"
 
@@ -216,6 +222,7 @@ def obtener_tabla():
                                 else ' + No tiene soluciones'
                 end  AS 'GPS + Solución',
                 case
+                    when m.mov_idgps = '9999' then 'GPS Dado de Baja'
                     when ISNULL(UL.mopo_fechahora,-1) = -1 THEN 'OFFLINE - URGENTE'
                     WHEN DATEDIFF(DAY,UL.mopo_fechahora,GETDATE()) >=30 THEN 'OFFLINE'
                     else 'ONLINE'
@@ -266,15 +273,19 @@ def obtener_tabla():
                 if filtro1:
                     query += f" where m.mov_nombre like '%{filtro1}%'"
                     if filtro2:
-                        query += f" and m.mov_codigo like '%{filtro2}%'"
+                        query += f" and m.mov_codigo in ({placeholders})"
                 
                 if filtro2 and not filtro1:
-                    query += f" where m.mov_codigo like '%{filtro2}%'"
+                    query += f" where m.mov_codigo in ({placeholders})"
 
                 query += " order by m.mov_idgps asc"
 
+            if filtro2:
+                cursor.execute(query,filtro2)
+            else:
+                cursor.execute(query)
 
-            cursor.execute(query)
+            
 
             columns = [column[0] for column in cursor.description]
             rows = cursor.fetchall()
