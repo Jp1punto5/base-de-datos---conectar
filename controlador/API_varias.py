@@ -178,7 +178,9 @@ def obtener_tabla():
                 CASE 
                     WHEN UL.mopo_fechahora IS NULL THEN 'Sin información'
                     else FORMAT(UL.MOPO_FECHAHORA,'dd-MM-yyyy HH:mm:ss')
-                END as 'Últ. Reporte',									
+                END as 'Últ. Reporte',	
+                ul.MOPO_LAT as 'Latitud',
+                ul.MOPO_LON as 'Longitud',								
                 case
                     when ul.mopo_fechahora is null then 'Sin Información'
                     else 'https://maps.google.com/maps?q='+CONVERT(VARCHAR(20),ul.MOPO_LAT)+','+CONVERT(VARCHAR(20),ul.MOPO_LON)
@@ -196,9 +198,7 @@ def obtener_tabla():
                 end as 'Fecha Instalación GPS',
 
                 CASE 
-                    WHEN M.MOV_IDGPS LIKE '86480203%' THEN 'gv75'
-                    WHEN M.MOV_IDGPS LIKE '41007%' THEN 'gv75'
-                    WHEN M.MOV_IDGPS LIKE '400070%' THEN 'gv75'
+                    WHEN M.MOV_IDGPS LIKE '86480203%' or M.MOV_IDGPS LIKE '41007%' or M.MOV_IDGPS LIKE '40007%' THEN 'gv75'
                     WHEN M.MOV_IDGPS LIKE '31040%' THEN 'Trax s44'
                     WHEN M.MOV_IDGPS LIKE '30040%' THEN 'Trax s44'
                     WHEN M.MOV_IDGPS LIKE '8646960%' THEN 'gv57'
@@ -206,8 +206,10 @@ def obtener_tabla():
                     WHEN M.MOV_IDGPS LIKE '862599%' THEN 'gv350'
                     WHEN M.MOV_IDGPS LIKE '864431%' THEN 'gv350'
                     WHEN M.MOV_IDGPS LIKE '860517%' THEN 'gv350'
-                    WHEN M.MOV_IDGPS LIKE '31020%' THEN 'Trax s17'
-                    WHEN M.MOV_IDGPS LIKE '31013%' THEN 'Trax s23'
+                    when M.MOV_IDGPS LIKE '30006%' then 'Trax s10'
+                    when M.MOV_IDGPS LIKE '30009%' or M.MOV_IDGPS LIKE '31009%' then 'Trax s15'
+                    WHEN M.MOV_IDGPS LIKE '31020%' or M.MOV_IDGPS LIKE '30020%' THEN 'Trax s17'
+                    WHEN M.MOV_IDGPS LIKE '31013%' or M.MOV_IDGPS LIKE '30013%' or M.MOV_IDGPS LIKE '30018%' or M.MOV_IDGPS LIKE '30110%' or  M.MOV_IDGPS LIKE '30109%' THEN 'Trax s23'
                     WHEN M.MOV_IDGPS LIKE '31010%' THEN 'Trax s16'
                     WHEN M.MOV_IDGPS LIKE '5100%' THEN 'gv300'
                     WHEN M.MOV_IDGPS LIKE '865413051%' THEN 'TELTONIKA FCMB920'
