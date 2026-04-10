@@ -263,8 +263,8 @@
                             throw new Error(mensaje);
                         } else {
 
-                            // validamos si se cambia la mov_foto para disparar el agregar equipamientos
-                            if (columna === "MOV_FOTO")
+                            // validamos si se cambia la mov_foto o la mov_idgps para disparar el agregar equipamientos
+                            if (columna === "MOV_FOTO" || columna === "MOV_IDGPS")
                             {
                                 agregarEquipamiento(patente);
                             }
