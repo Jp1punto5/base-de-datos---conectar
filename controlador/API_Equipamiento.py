@@ -295,6 +295,9 @@ def agregar_equipamiento():
                                 le.id_equi,
                                 case
                                     when mg.nombre is not null and le.id_equi = 4 then mg.nombre
+                                    when le.id_equi = 65 then 'DRIVERZEN'
+			                        when le.id_equi = 66 then 'DRIVERZEN360'
+                                    when len(eq.nombre) >50 then substring(eq.nombre,1,50) -- esto es para evitar que se caiga la inserción
                                     else eq.nombre
                                 end ,
                                 getdate()
