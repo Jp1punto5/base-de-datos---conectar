@@ -103,14 +103,16 @@ def obtener_tabla():
         limite = int(data.get('limite', 10))  # 🔥 nuevo
 
         # aqui verificamos si existen patentes a buscar, de esta forma las listamos todas sin problemas de limite
-        if filtro2 and tabla =="MOVILES" or tabla == "reportabilidad" or tabla == "INTEGRACIONES":
+        if filtro2 and tabla in ["MOVILES", "reportabilidad", "INTEGRACIONES"]:
             limite = len(filtro2)
 
         #vamos a manipular el array de patentes
         placeholders = ",".join(["?"] * len(filtro2))
         # ⚠️ validación básica (muy importante)
-        if limite <= 0 or limite > 1000:
+        if limite <= 0:
             limite = 10
+
+
 
         with get_connection_dynamic(sesion['server'],sesion['user'],sesion['password'],database) as conn:
             cursor = conn.cursor()
