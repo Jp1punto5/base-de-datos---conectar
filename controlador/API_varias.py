@@ -245,7 +245,7 @@ def obtener_tabla():
                     when UL.MOEV_NUMEROEVENTO = 45 then CAST(UL.MOEV_NUMEROEVENTO as varchar)+' = Vehículo Encendido'
                     when UL.MOEV_NUMEROEVENTO = 47 then CAST(UL.MOEV_NUMEROEVENTO as varchar)+' = Reporte sin Cobertura'
                     when UL.MOEV_NUMEROEVENTO = 90 then CAST(UL.MOEV_NUMEROEVENTO as varchar)+' = Movimientos con Motor Apagado'
-                    when UL.MOEV_NUMEROEVENTO = 40 then CAST(UL.MOEV_NUMEROEVENTO as varchar)+' = Bajo Nivel de Bateria'
+                    when UL.MOEV_NUMEROEVENTO = 40 then CAST(UL.MOEV_NUMEROEVENTO as varchar)+' = Bajo Nivel de Batería'
                     when UL.MOEV_NUMEROEVENTO = 42 then CAST(UL.MOEV_NUMEROEVENTO as varchar)+' = Activación Botón de Pánico'
                     WHEN UL.MOEV_NUMEROEVENTO IN (17,18) THEN CAST(UL.MOEV_NUMEROEVENTO as varchar)+' = Corte de Combustible / Habilitación de Combustible'
                     when UL.MOEV_NUMEROEVENTO IN (54, 53, 30) then CAST(UL.MOEV_NUMEROEVENTO as varchar)+' = Evento Control Tag'
