@@ -85,7 +85,6 @@ def agregar_equipamiento():
                                 ('31020', 'TRAX S17'),
                                 ('30013', 'TRAX S23'),
                                 ('31013', 'TRAX S23'), 
-                                ('31013', 'TRAX S23'), 
                                 ('31040', 'TRAX S44'),
                                 ('30040', 'TRAX S44'),
                                 ('35262', 'TELTONIKA 2G FMB920/FMB910/MTB100'),
