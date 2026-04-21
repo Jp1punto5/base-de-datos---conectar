@@ -3,6 +3,18 @@ let markers = [];
 let markerSeleccionado = null;
 let infoWindow;   // mapa principal
 
+
+// 🔥 CARGA INICIAL
+document.addEventListener("DOMContentLoaded", () => {
+
+    configurarPlaceholders(); // 🔥 AQUÍ SE ACTIVA
+
+    cargarDatos();
+    hacerModalMovible();
+});
+
+
+
 //--------- Volver al Home -------------
 document.getElementById("id_home").onclick = function() {
     window.location.href = "home.html";
@@ -218,6 +230,14 @@ function renderTabla(data, columnas) {
 
     const header = document.createElement('tr');
 
+    // Solo en caso de que se necesite realmente, descomentar
+
+    // if (tabla.toLowerCase() === "reportabilidad") {
+    //     if (!columnas.includes("Dirección")) {
+    //         columnas.push("Dirección");
+    //     }
+    // }
+
     columnas.forEach((col) => {
         const th = document.createElement('th');
 
@@ -302,6 +322,26 @@ function renderTabla(data, columnas) {
                   // Si encontramos el ID, asignamos el nombre, si no, mostramos el ID
                  td.innerText = integracion ? integracion.nombre : row[col];
             }  
+        
+             else if (col === "Dirección")
+            {
+                    const latt = row["Latitud"] || row["latitud"];
+                    const lonn = row["Longitud"] || row["longitud"];
+                if (latt && lonn) 
+                    {
+                        obtenerDireccion(latt, lonn).then(direccion => {
+                        td.innerText = direccion;
+                        }).catch(() => {
+                            td.innerText = "Sin dirección";
+                        });
+                } 
+                else 
+                {
+                    td.innerText = "Sin coordenadas";
+                }
+            }
+        
+             
             else 
              {
                     td.innerText = row[col];
@@ -464,21 +504,97 @@ function cargarDatos() {
     console.log("Tabla:" + tabla);
 
 
-    fetch('http://127.0.0.1:5000/tabla', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            session_id,
-            database,
-            tabla,
-            filtro1,
-            filtropatente,
-            limite
-        })
-    })
+    // 🔥 si no hay muchas patentes, usa tu lógica normal
+    if (!Array.isArray(filtropatente) || filtropatente.length <= 2000) {
 
-    .then(res => res.json())
-    .then(response => {
+        fetch('http://127.0.0.1:5000/tabla', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    session_id,
+                    database,
+                    tabla,
+                    filtro1,
+                    filtropatente,
+                    limite
+                })
+            })
+            .then(res => res.json())
+            .then(response => manejarRespuesta(response));
+
+    } else {
+
+        // 🔥 dividir en bloques
+        const dividirArray = (array, tamaño = 2000) => {
+            const resultado = [];
+            for (let i = 0; i < array.length; i += tamaño) {
+                resultado.push(array.slice(i, i + tamaño));
+            }
+            return resultado;
+        };
+
+        const chunks = dividirArray(filtropatente, 2000);
+        const MAX_CONCURRENTE = 4; // este es el maximo de solicitudes simultaneas a la API
+
+        let datosFinales = [];
+        let columnasGlobalTemp = null;
+
+        const procesarChunks = async () => {
+            for (let i = 0; i < chunks.length; i += MAX_CONCURRENTE) {
+
+                const grupo = chunks.slice(i, i + MAX_CONCURRENTE);
+
+                const promesas = grupo.map(chunk => {
+                    return fetch('http://127.0.0.1:5000/tabla', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            session_id,
+                            database,
+                            tabla,
+                            filtro1,
+                            filtropatente: chunk,
+                            limite: chunk.length // este dato realmente no es utilizado en el backend, ya que en  la API se toma como limite el largo de "filtroPatente"
+                        })
+                    }).then(res => res.json());
+                });
+
+                const respuestas = await Promise.all(promesas);
+
+                respuestas.forEach(response => {
+                    if (!response.error) {
+                        datosFinales.push(...response.data);
+
+                        if (!columnasGlobalTemp) {
+                            columnasGlobalTemp = response.columnas;
+                        }
+                    }
+                });
+            }
+
+            manejarRespuesta({
+                data: datosFinales,
+                columnas: columnasGlobalTemp
+            });
+        };
+
+        procesarChunks();
+    }
+}
+
+
+    // se crea función para dividir y crear bloques de datos
+    function dividirArray(array, tamaño = 2000) {
+        const resultado = [];
+        for (let i = 0; i < array.length; i += tamaño) {
+            resultado.push(array.slice(i, i + tamaño));
+        }
+        return resultado;
+    }
+
+// función para manejar respuesta de la  API Tabla
+
+    function manejarRespuesta(response) {
 
         if (response.error) {
             document.getElementById('estado').innerText = "❌ " + response.error;
@@ -487,8 +603,10 @@ function cargarDatos() {
 
         const data = response.data;
         const columnas = response.columnas;
-        console.log(columnas); // esto me muestra en consola el nombre de todas las columnas de la tabla de turno
+
+        console.log(columnas);
         console.log(data);
+
         document.getElementById('estado').innerText = `✅ ${data.length} registros`;
 
         datosGlobal = data;
@@ -499,19 +617,13 @@ function cargarDatos() {
         const layout = document.querySelector(".layout-mapa");
         const mapaContainer = document.querySelector(".mapa-container");
 
-        // este mensaje de exito es cuando si se encuentra la o las unidades
-        if(data.length !== limite && data.length > 0)
-        {
-
-            if (data.length===1)
-            {
+        if(data.length !== limite && data.length > 0) {
+            if (data.length === 1) {
                 mostrarAlerta(data.length+" Vehículo encontrado","success");
+            } else {
+                mostrarAlerta(data.length+" Vehículos encontrados","success");
             }
-            else {
-                     mostrarAlerta(data.length+" Vehículos encontrados","success");
-            }    
         }
- 
 
         if (tabla.toLowerCase() === "reportabilidad") {
 
@@ -535,8 +647,7 @@ function cargarDatos() {
 
             limpiarMarkers();
         }
-    });
-}
+    }
 
 // ---------------- INIT ----------------
 
@@ -564,14 +675,6 @@ bottomScroll.addEventListener("scroll", () => {
     topScroll.scrollLeft = bottomScroll.scrollLeft;
 });
 
-// 🔥 CARGA INICIAL
-document.addEventListener("DOMContentLoaded", () => {
-
-    configurarPlaceholders(); // 🔥 AQUÍ SE ACTIVA
-
-    cargarDatos();
-    hacerModalMovible();
-});
 
 
 
