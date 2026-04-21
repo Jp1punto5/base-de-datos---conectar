@@ -48,8 +48,10 @@
         setTimeout(() => {
             if (!mapModal) {
                 cargarMapaInicial();
-                actualizarPosicion();
+               
             }
+
+            actualizarPosicion(); // siempre se ejecuta
 
             google.maps.event.trigger(mapModal, "resize");
             mapModal.setCenter({ lat: -33.45, lng: -70.66 });
@@ -358,6 +360,22 @@
             isDragging = false;
         });
     }
+
+
+    // cerrar MODAL si se hace click fuera de el
+    window.addEventListener('click', function (event) {
+    const modal = document.getElementById('modalEditar');
+
+    if (event.target === modal) {
+        cerrarModal();
+    }
+    });
+
+    document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') {
+        cerrarModal();
+    }
+});
 
     // 🔥 EXPONER SOLO LO NECESARIO
     window.abrirModal = abrirModal;
