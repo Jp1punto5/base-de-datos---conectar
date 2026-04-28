@@ -342,6 +342,12 @@ DRIVER={ODBC Driver 18 for SQL Server}
 pip install -r requirements.txt
 ```
 
+## este es solo un Tips para el futuro, con este comando puedes actualizar tu archivo requirements.txt con las nuevas importaciones
+## OJO esto solo funciona teniendo activo el entorno virtual /venv/
+``` bash 
+pip freeze > requirements.txt 
+```
+
 ---
 
 ### Error al activar entorno virtual
