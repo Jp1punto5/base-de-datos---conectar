@@ -4,6 +4,7 @@ let markerSeleccionado = null;
 let infoWindow;   // mapa principal
 
 
+
 // 🔥 CARGA INICIAL
 document.addEventListener("DOMContentLoaded", () => {
 
