@@ -304,6 +304,7 @@ function renderTabla(data, columnas) {
             } else if (col.toLowerCase() === "id_tipointegracion") 
             {
                 console.log("llegamos a la columna Nombre Integración");
+                
                 console.log("row[col] =", row[col]);
                 // Array con los datos de las integraciones
                 const integraciones = 
