@@ -315,7 +315,8 @@ function renderTabla(data, columnas) {
                     {id:"111", nombre : "API - OWL Codelco (El Teniente)"},
                     {id:"130", nombre:"API - SKYNAV PELAMBRES"},
                     {id:"95", nombre: "API - SKYNAV CENTINELA"},
-                    {id:"113", nombre:"API - SKYNAV ANTUCOYA"}
+                    {id:"113", nombre:"API - SKYNAV ANTUCOYA"},
+                    {id:"141",nombre:"API - SKYNAV CyG"}
                 ]
                  // Buscar el nombre de la integración usando el ID
                  const integracion = integraciones.find(integracion => String(integracion.id) === String(row[col]));
