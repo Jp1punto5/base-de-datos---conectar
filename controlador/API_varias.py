@@ -238,6 +238,7 @@ def obtener_tabla():
                 end as 'Días sin reportar',
                 CAST(ul.mopo_vel as varchar) + ' km/hrs' as 'Velocidad',
                 CASE
+                    when ul.moev_numeroevento is null then 'Sin evento - dato Nulo'
                     when UL.MOEV_NUMEROEVENTO = 50 then CAST(UL.MOEV_NUMEROEVENTO as varchar)+' = Desconexión de energía GPS / Manipulación Fisica'
                     when UL.MOEV_NUMEROEVENTO = 46 then CAST(UL.MOEV_NUMEROEVENTO as varchar)+' = Vehículo Apagado'
                     when UL.MOEV_NUMEROEVENTO = 28 then CAST(UL.MOEV_NUMEROEVENTO as varchar)+' = Apagado de Motor'
